@@ -28,12 +28,12 @@ export const useTodoStore = defineStore("todoStore", {
   }),
   getters: {
     getById: (state: TodoState) => (id: string) => {
-      return state.items.filter((item: Todo) => item.id === id);
+      return state.items.find((item: Todo) => item.id === id);
     },
     getOrderedItems: (state: TodoState) => {
-      return state.items.sort(
+      return [...state.items].sort(
         (a: Todo, b: Todo) =>
-          a.createdAt.getMilliseconds() - b.createdAt.getMilliseconds()
+          a.createdAt.getTime() - b.createdAt.getTime()
       );
     },
   },
@@ -54,8 +54,7 @@ export const useTodoStore = defineStore("todoStore", {
     update(id: string, update: TodoUpdate) {
       this.items = this.items.map(
         (item: Todo) =>
-          item.id === id && { ...item, update, updatedAt: new Date() }
-      );
+          item.id === id && { ...item, ...update, updatedAt: new Date()});
     },
   },
 });
